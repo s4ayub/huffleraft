@@ -51,22 +51,22 @@ func Test3NodeCluster(t *testing.T) {
 	rkv3.Start()
 	time.Sleep(5000 * time.Millisecond)
 
-  firstJoinErr := rkv.Join("127.0.0.1:8740")
-  secondJoinErr := rkv.Join("127.0.0.1:8730")
-  time.Sleep(5000 * time.Millisecond)
+	firstJoinErr := rkv.Join("127.0.0.1:8740")
+	secondJoinErr := rkv.Join("127.0.0.1:8730")
+	time.Sleep(5000 * time.Millisecond)
 
-  // The key,value pair set in the first node should be propagated to the nodes that joined
-  rkv3Get, _ := rkv3.Get("pierce")
+	// The key,value pair set in the first node should be propagated to the nodes that joined
+	rkv3Get, _ := rkv3.Get("pierce")
 
-  // Doesn't matter who the leader actually is, this command will be redirected to it
-  // and the value can be retrieved from any node
-  redirectedSetErr := rkv2.Set("yes", "no")
-  time.Sleep(5000 * time.Millisecond)
-  rkvGet, _ := rkv.Get("yes")
+	// Doesn't matter who the leader actually is, this command will be redirected to it
+	// and the value can be retrieved from any node
+	redirectedSetErr := rkv2.Set("yes", "no")
+	time.Sleep(5000 * time.Millisecond)
+	rkvGet, _ := rkv.Get("yes")
 
-  assert.Nil(t, firstJoinErr)
+	assert.Nil(t, firstJoinErr)
 	assert.Nil(t, secondJoinErr)
-  assert.Equal(t, "hawthorne", string(rkv3Get), "Get should return the value for the key")
-  assert.Nil(t, redirectedSetErr)
-  assert.Equal(t, "no", string(rkvGet), "Get should return the value for the key")
+	assert.Equal(t, "hawthorne", string(rkv3Get), "Get should return the value for the key")
+	assert.Nil(t, redirectedSetErr)
+	assert.Equal(t, "no", string(rkvGet), "Get should return the value for the key")
 }

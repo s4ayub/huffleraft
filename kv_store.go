@@ -32,6 +32,7 @@ func NewBadgerKV(dir string) (*BadgerKV, error) {
 	return bagderKV, nil
 }
 
+// Get a value using a key from a BadgerKV
 func (b *BadgerKV) Get(key []byte) ([]byte, error) {
 	var item badger.KVItem
 	err := b.kv.Get(key, &item)
@@ -42,10 +43,12 @@ func (b *BadgerKV) Get(key []byte) ([]byte, error) {
 	return item.Value(), nil
 }
 
+// Set a key-value pair in a BadgerKV
 func (b *BadgerKV) Set(key, val []byte) error {
 	return b.kv.Set(key, val, 0)
 }
 
+// Delete a key-value pair in a BadgerKV
 func (b *BadgerKV) Delete(key []byte) error {
 	return b.kv.Delete(key)
 }
