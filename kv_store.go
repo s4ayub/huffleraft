@@ -5,12 +5,6 @@ import (
 	"os"
 )
 
-type KVstore interface {
-	Get(key []byte) ([]byte, error)
-	Set(key, val []byte) error
-	Delete(key []byte) error
-}
-
 type BadgerKV struct {
 	kv *badger.KV
 }
