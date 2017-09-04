@@ -30,6 +30,8 @@ import with: `go get github.com/s4ayub/huffleraft`
 
 ### Features and Purpose:
 
+A RaftStore instance encapsulates a raft node (from hashicorp/raft) for consensus, a storage system for key-value pairs (from dgraph-io/badger) and a HTTP server to accept accept and redirect requests to the leader node. 
+
 The purpose of this package is to explore the raft consensus algorithm, specifically <a href="https://github.com/hashicorp/raft" target="_blank">hashicorp's implementation</a>. This package is **effective for experimenting with raft** because the API is such that the user doesn't even have to build any HTTP requests, rather, the package does that in the background through Get, Set, Delete, and Join. This makes it very easy and quick to play around with raft in conjunction with other code.
  - Perform CRUD operations on draph-io's Badger storage in a distributed manner
  - Fault tolerant as per the <a href="https://raft.github.io/" target="_blank">raft consensus algorithm</a>
@@ -38,7 +40,7 @@ The purpose of this package is to explore the raft consensus algorithm, specific
 ---
 
 ### Example logs:
-Once a couple raftservers are running, and a cluster is formed, the logs may look something like this after a Set command has been performed on them:
+Once a couple RaftStore instances are running, and a cluster is formed, the logs may look something like this after a Set command has been performed on them:
 
 ```
 2017/09/04 04:02:07 [DEBUG] raft: Node 127.0.0.1:8740 updated peer set (2): [127.0.0.1:8730 127.0.0.1:8750 127.0.0.1:8740]
