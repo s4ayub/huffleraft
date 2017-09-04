@@ -14,6 +14,11 @@
     <a href="https://github.com/s4ayub/huffleraft/blob/master/example/example1.go" target="_blank">example</a> 
     to see the system in action, especially for CRUD operations on a 5 node cluster!
   </strong>
+  <br/>
+  <strong>  
+      For full documentation and more thorough descriptions: <a href="https://godoc.org/github.com/s4ayub/huffleraft" target="_blank">godoc</a>
+  </strong>
+
 </p>
 <p align="center">
   <a href="https://travis-ci.org/s4ayub/huffleraft" target="_blank"><img src="https://travis-ci.org/s4ayub/huffleraft.svg?branch=master" alt="Build Status" /> </a>
@@ -21,7 +26,7 @@
   
 import with: `go get github.com/s4ayub/huffleraft`
 
-Documentation: <a href="https://godoc.org/github.com/s4ayub/huffleraft" target="_blank">godoc</a>
+
 
 ### Features and Purpose:
 
