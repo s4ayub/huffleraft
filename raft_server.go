@@ -9,13 +9,10 @@
 // and directory. Start() is called on the RaftStore which starts the HTTP server
 // to accept requests. This RaftStore can be interacted with by using Get, Set, Delete,
 // and Join (to add nodes to a cluster).
-
 // Check out the fsm.go file to see how logs are truncated using raft's Snapshot, Restore,
 // and Persist mechanism.
-
 // For more details check out the github repo: https://github.com/s4ayub/huffleraft
 // and also the examples/ folder!!!
-
 package huffleraft
 
 import (
