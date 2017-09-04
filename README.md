@@ -20,11 +20,11 @@
 </p>
   
 import with: `go get github.com/s4ayub/huffleraft`
-
+Documentation: <a href="https://godoc.org/github.com/s4ayub/huffleraft" target="_blank">godoc</a>
 
 ### Features and Purpose:
 
-The purpose of this package is to explore the raft consensus algorithm, specifically <a href="https://github.com/hashicorp/raft" target="_blank">hashicorp's implementation</a>. This package is **effective for experimenting with raft** because the API is such that the user doesn't even have to build any HTTP requests, rather, the package does that for them through Get, Set, Delete, and Join. This makes it very easy and quick to play around with raft in conjunction with other code.
+The purpose of this package is to explore the raft consensus algorithm, specifically <a href="https://github.com/hashicorp/raft" target="_blank">hashicorp's implementation</a>. This package is **effective for experimenting with raft** because the API is such that the user doesn't even have to build any HTTP requests, rather, the package does that in the background through Get, Set, Delete, and Join. This makes it very easy and quick to play around with raft in conjunction with other code.
  - Perform CRUD operations on draph-io's Badger storage in a distributed manner
  - Fault tolerant as per the <a href="https://raft.github.io/" target="_blank">raft consensus algorithm</a>
  - Commands can be performed on any node in a cluster and they'll be **redirected to the leader of the cluster**
@@ -52,10 +52,10 @@ I wanted to dive deeper into distributed systems by building one of my own. The 
 
 ### Design Decisions:
 - Leader re-direction:
-  - The `raftStore` struct encases an http listener to handle requests and a `raftServer` to handle the consensus. There are two important addresses associated with each raft store. The httpAddr listens for http requests, and the raftAddr which the raft server uses for its transport layer between raft nodes. As per the consensus algorithm, commands such as setting, deleting and joining must be sent to the leader node only. The leader's raftAddr can easily be accessed in a cluster by `raftServer.Leader()` (raftServer being an instance of Raft from hashicorp/raft). However, the httpAddr associated  cannot be easily retrieved, hence, a link must be made between the raftAddr and the httpAddr, since the httpAddr is the one that the user would be sending their commands to. I decided that the httpAddr would always be 1 port away from the raftAddr.
+  - The `RaftStore` struct encases an http listener to handle requests and a `RaftServer` to handle the consensus. There are two important addresses associated with each raft store. The httpAddr listens for http requests, and the raftAddr which the raft server uses for its transport layer between raft nodes. As per the consensus algorithm, commands such as setting, deleting and joining must be sent to the leader node only. The leader's raftAddr can easily be accessed in a cluster by `raftServer.Leader()` (raftServer being an instance of Raft from hashicorp/raft). However, the httpAddr associated  cannot be easily retrieved, hence, a link must be made between the raftAddr and the httpAddr, since the httpAddr is the one that the user would be sending their commands to. I decided that the httpAddr would always be 1 port away from the raftAddr. The httpAddr can always be retrieved now by adding 1 to raftAddr.
 
-- Using dgraph-io/bagder:
-  - Bagder was proposed as a performant Go alternative to RocksDB which made it an attractive storage back-end for the key-value store.
+- Using <a href="https://github.com/dgraph-io/badger" target="_blank">dgraph-io/badger</a>:
+  - Bagder was proposed as a performant Go alternative to RocksDB which made it an attractive storage back-end for the key-value store. 
 
 ---
 
