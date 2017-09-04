@@ -1,3 +1,21 @@
+// huffleraft provides a package to run a distributed key value store
+// driven by dgraph-io/badger for storage and hashicorp/raft for consensus.
+// It can be integrated wtihin code much like embedded storage systems like leveldb.
+// The package can be imported and does NOT require the user to make
+// HTTP requests through curl and treat the system as an external application.
+// Rather, using the API, this system can be embedded within applications.
+// Firstly, the user makes a new badger store using NewBadgerKV. This is the storage
+// for the key-value pairs for each raft node. A RaftStore using an appropriate port
+// and directory. Start() is called on the RaftStore which starts the HTTP server
+// to accept requests. This RaftStore can be interacted with by using Get, Set, Delete,
+// and Join (to add nodes to a cluster).
+
+// Check out the fsm.go file to see how logs are truncated using raft's Snapshot, Restore,
+// and Persist mechanism.
+
+// For more details check out the github repo: https://github.com/s4ayub/huffleraft
+// and also the examples/ folder!!!
+
 package huffleraft
 
 import (
@@ -30,6 +48,9 @@ type command struct {
 	Addr  string `json:"addr,omitempty"`
 }
 
+// A RaftStore encapsulates the http server (httpAddr, ln),
+// a raft node (raftDir string, raftAddr string, RaftServer *raft.Raft)
+// and a key-value store (kvs *BadgerKV).
 type RaftStore struct {
 	httpAddr   string
 	raftDir    string
@@ -41,6 +62,8 @@ type RaftStore struct {
 	logger     *log.Logger
 }
 
+// NewRaftKV returns a RaftStore. nableSingle is used to determine whether a node should be allowed to elect
+// itself as a leader. Set this option to true if you plan to send commands to a single node.
 func NewRaftKV(raftDir, raftAddr string, kvs *BadgerKV, enableSingle bool) (*RaftStore, error) {
 	httpAddr, err := getHttpAddr(raftAddr)
 	if err != nil {
@@ -130,14 +153,16 @@ func setupRaftCommunication(raftAddr string) (*raft.NetworkTransport, error) {
 	return transport, nil
 }
 
-// Set sets the value for the given key.
+// Gets the value for the given key from any node
 func (rs *RaftStore) Get(key string) ([]byte, error) {
 	rs.mu.Lock()
 	defer rs.mu.Unlock()
 	return rs.kvs.Get([]byte(key))
 }
 
-// Set sets the value for the given key.
+// Sends a request to set a key-value to the http server of the leader node in the
+// raft cluster. This pair is then stored inside the badger stores of the RaftStore
+// instances throughout cluster. This command REQUIRES a leader in a cluster.
 func (rs *RaftStore) Set(key, value string) error {
 	b, err := json.Marshal(map[string]string{"key": key, "val": value})
 	if err != nil {
@@ -162,7 +187,9 @@ func (rs *RaftStore) Set(key, value string) error {
 	return nil
 }
 
-// Detete deletes given key.
+// Sends a request to delete a key to the http server of the leader node in the
+// raft cluster. This key is deleted inside the badger stores of the RaftStore
+// instances throughout cluster. This command REQUIRES a leader in a cluster.
 func (rs *RaftStore) Delete(key string) error {
 	httpAddr, err := getHttpAddr(rs.RaftServer.Leader())
 	if err != nil {
@@ -189,7 +216,10 @@ func (rs *RaftStore) Delete(key string) error {
 	return nil
 }
 
-// Detete deletes given key.
+// The addr provided is that of the node that would like to join a cluster, and the method Join
+// is run on a node within that cluster. It sends a request to join a cluster to the http server
+// of the leader node in the cluster. If there is no leader, then the http address of the node
+// this method was run on will be used. This command does not require a leader in a cluster.
 func (rs *RaftStore) Join(addr string) error {
 	b, err := json.Marshal(map[string]string{"addr": addr})
 	if err != nil {

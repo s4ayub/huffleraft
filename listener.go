@@ -1,5 +1,3 @@
-// Package httpd provides the HTTP server for accessing the distributed key-value store.
-// It also provides the endpoint for other nodes to join an existing cluster.
 package huffleraft
 
 import (
@@ -11,7 +9,11 @@ import (
 	"strings"
 )
 
-// Start starts the http service using the listener in RaftStore.
+// Start starts the http service using the listener within a RaftStore.
+// The HTTP server is used to redirect commands like Set, Delete and Join
+// to the leader RaftStore in a cluster. The HTTP address is always
+// one away from the Raft address which the raft node uses for communication
+// with other raft nodes.
 func (rs *RaftStore) Start() error {
 	server := http.Server{
 		Handler: rs,
@@ -35,13 +37,13 @@ func (rs *RaftStore) Start() error {
 	return nil
 }
 
-// Close closes the service.
+// Close closes the HTTP server of the RaftStore.
 func (rs *RaftStore) Close() {
 	rs.ln.Close()
 	return
 }
 
-// ServeHTTP allows Service to serve HTTP requests.
+// ServeHTTP allows the RaftStore to serve HTTP requests.
 func (rs *RaftStore) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(r.URL.Path, "/key") {
 		rs.handleKeyRequest(w, r)
@@ -52,6 +54,7 @@ func (rs *RaftStore) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// handleJoin actually applies the join upon receiving the http request.
 func (rs *RaftStore) handleJoin(w http.ResponseWriter, r *http.Request) {
 	m := map[string]string{}
 	err := json.NewDecoder(r.Body).Decode(&m)
@@ -71,6 +74,7 @@ func (rs *RaftStore) handleJoin(w http.ResponseWriter, r *http.Request) {
 	rs.logger.Printf("node at %s joined successfully", remoteAddr)
 }
 
+// handleKeyRequest actually applies the set or delete commands upon receiving the http request.
 func (rs *RaftStore) handleKeyRequest(w http.ResponseWriter, r *http.Request) {
 	getKey := func() string {
 		parts := strings.Split(r.URL.Path, "/")
