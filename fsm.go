@@ -1,21 +1,3 @@
-// huffleraft provides a package to run a distributed key value store
-// driven by dgraph-io/badger for storage and hashicorp/raft for consensus.
-// It can be integrated wtihin code much like embedded storage systems like leveldb.
-// The package can be imported and does NOT require the user to make
-// HTTP requests through curl and treat the system as an external application.
-// Rather, using the API, this system can be embedded within applications.
-// Firstly, the user makes a new badger store using NewBadgerKV. This is the storage
-// for the key-value pairs for each raft node. A RaftStore using an appropriate port
-// and directory. Start() is called on the RaftStore which starts the HTTP server
-// to accept requests. This RaftStore can be interacted with by using Get, Set, Delete,
-// and Join (to add nodes to a cluster).
-
-// Check out the fsm.go file to see how logs are truncated using raft's Snapshot, Restore,
-// and Persist mechanism.
-
-// For more details check out the github repo: https://github.com/s4ayub/huffleraft
-// and also the examples/ folder!!!
-
 package huffleraft
 
 import (
