@@ -20,6 +20,7 @@
 </p>
   
 import with: `go get github.com/s4ayub/huffleraft`
+
 Documentation: <a href="https://godoc.org/github.com/s4ayub/huffleraft" target="_blank">godoc</a>
 
 ### Features and Purpose:
@@ -60,6 +61,7 @@ I wanted to dive deeper into distributed systems by building one of my own. The 
 ---
 
 ### Caveats and Suggested Improvements:
+- Time delays must be put after certain commands to ensure that the command has been performed, and propagated to all nodes before further code can run
 - Cannot use side by side ports (8866 and 8867 for example) for two raft servers because the port following that which a raft server is initiated on is used for the http server. This is done to establish a link between the raftAddr and the httpAddr as discussed above. This system can likely be improved upon.
 - More robust error handling
 
