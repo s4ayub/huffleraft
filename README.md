@@ -18,3 +18,18 @@
 <p align="center">
   <a href="https://travis-ci.org/s4ayub/huffleraft" target="_blank"><img src="https://travis-ci.org/s4ayub/huffleraft.svg?branch=master" alt="Build Status"   </a>
 </p>
+
+### Features and Purpose:
+
+--- 
+### Motivation and References:
+
+---
+
+### Example log screenshots:
+
+---
+
+### Caveats and Suggested Improvements:
+
+---
