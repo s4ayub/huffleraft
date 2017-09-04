@@ -67,7 +67,8 @@ I wanted to dive deeper into distributed systems by building one of my own. The 
 
 ### Caveats and Suggested Improvements:
 - Time delays must be put after certain commands to ensure that the command has been performed, and propagated to all nodes before further code can run
-- Cannot use side by side ports (8866 and 8867 for example) for two raft servers because the port following that which a raft server is initiated on is used for the http server. This is done to establish a link between the raftAddr and the httpAddr as discussed above. This system can likely be improved upon.
+- Cannot use side by side ports (8866 and 8867 for example) for two raft servers because the port next to the one on which a raft server is initiated on, is used for http requests. This is done to establish a link between the raftAddr and the httpAddr as discussed above. **This routing system can likely be improved upon using a custom multiplexer setup where requests
+can be sent to the same port that the raft node exists on.** Something like this in rqlite:  https://github.com/rqlite/rqlite/tree/master/tcp
 - More robust error handling
 
 ---
