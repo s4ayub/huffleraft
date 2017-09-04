@@ -36,6 +36,7 @@ The purpose of this package is to explore the raft consensus algorithm, specific
  - Perform CRUD operations on draph-io's Badger storage in a distributed manner
  - Fault tolerant as per the <a href="https://raft.github.io/" target="_blank">raft consensus algorithm</a>
  - Commands can be performed on any node in a cluster and they'll be **redirected to the leader of the cluster**
+ - Logs are truncated using the Snapshot, Restore and Persist mechanism provided by hashicorp/raft (checkout fsm.go)
 
 ---
 
