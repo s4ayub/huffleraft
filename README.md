@@ -5,7 +5,7 @@
 </p>
 <h1 align="center">huffleraft</h1>
 <p align="center">
-  Distributed fault-tolerant key-value store driven by 
+  Replicated fault-tolerant key-value store driven by 
   <a href="https://github.com/hashicorp/raft" target="_blank">hashicorp/raft</a> and 
   <a href="https://github.com/dgraph-io/badger" target="_blank">dgraph-io/badger</a>
 </p>
