@@ -20,9 +20,6 @@
   </strong>
 
 </p>
-<p align="center">
-  <a href="https://travis-ci.org/s4ayub/huffleraft" target="_blank"><img src="https://travis-ci.org/s4ayub/huffleraft.svg?branch=master" alt="Build Status" /> </a>
-</p>
   
 import with: `go get github.com/s4ayub/huffleraft`
 
