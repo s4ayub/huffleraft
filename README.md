@@ -21,7 +21,7 @@
 
 </p>
   
-import with: `go get github.com/s4ayub/huffleraft`
+`import "github.com/s4ayub/huffleraft"`
 
 
 
